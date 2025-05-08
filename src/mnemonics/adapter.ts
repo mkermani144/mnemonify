@@ -1,4 +1,4 @@
-import { Result, Ok, Err } from "ts-results-es";
+import { Result, Err } from "ts-results-es";
 import { MnemonicsResponse, Word } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_MNEMONICS_API_URL;
