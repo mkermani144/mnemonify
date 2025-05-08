@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Sour_Gummy } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
+import { Toast } from "@/components/toast";
 import "./globals.css";
 
 const sourGummy = Sour_Gummy({
@@ -34,6 +35,7 @@ export default function RootLayout({
             <Header />
             <main className="flex-1">{children}</main>
           </div>
+          <Toast />
         </ThemeProvider>
       </body>
     </html>
