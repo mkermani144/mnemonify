@@ -3,24 +3,30 @@
 import { Input } from "@/components/ui/input";
 import { getMnemonicsForWord } from "../mnemonics/service";
 import { MnemonicsList } from "../mnemonics/components/mnemonics-list";
-import { Mnemonic } from "../mnemonics/types";
+import { DefinitionBox } from "../mnemonics/components/definition-box";
+import { Mnemonic, Definition } from "../mnemonics/types";
 import { useState } from "react";
 
 export function WordInput() {
   const [isLoading, setIsLoading] = useState(false);
   const [mnemonics, setMnemonics] = useState<Mnemonic[]>([]);
+  const [definition, setDefinition] = useState<Definition | null>(null);
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !isLoading) {
-      setIsLoading(true);
-      const result = await getMnemonicsForWord(e.currentTarget.value);
-      setIsLoading(false);
+      const input = e.currentTarget.value.trim();
+      if (!input) return;
 
+      setIsLoading(true);
+      const result = await getMnemonicsForWord(input);
+      setIsLoading(false);
       if (result.isOk()) {
         setMnemonics(result.value.getMnemonics());
+        setDefinition(result.value.getDefinition());
       } else {
-        console.error("Error:", result.error);
+        console.error("Failed to get mnemonics:", result.error);
         setMnemonics([]);
+        setDefinition(null);
       }
     }
   };
@@ -34,6 +40,7 @@ export function WordInput() {
         onKeyDown={handleKeyDown}
         disabled={isLoading}
       />
+      {definition && <DefinitionBox definition={definition} />}
       {mnemonics.length > 0 && <MnemonicsList mnemonics={mnemonics} />}
     </div>
   );
